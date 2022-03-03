@@ -1,0 +1,8 @@
+[[redirects]]
+	from = "*"
+	to = "/page.html"
+	status = 200
+
+[build]
+	publish = "build/"
+	command = "npm run build"
