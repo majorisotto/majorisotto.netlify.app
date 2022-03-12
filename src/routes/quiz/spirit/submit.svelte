@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { Spinner } from 'sveltestrap';
 
-	import { objectQuestions, names } from './data.ts';
+	import questions, { names } from './data';
 
 	import { sleep, random } from '$lib/utils';
 
@@ -29,7 +29,7 @@
 <svelte:head><title>spirit results</title></svelte:head>
 
 {#if mounted}
-	{#each objectQuestions as { id, name, answers } (id)}
+	{#each questions as { id, name, answers } (id)}
 		<p>
 			{name} (<code>{id}</code>): {answers.find(_ => _.id === map.get(id))?.name}
 		</p>
