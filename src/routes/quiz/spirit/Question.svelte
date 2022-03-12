@@ -38,7 +38,7 @@
 	}
 </script>
 
-<span class='neutral slight normal very' />
+<span class='agree'><span class='form-check neutral slight normal very positive negative'><input /></span></span>
 
 {#if style === 'scale'}
 	<Label for={id}>{label}</Label>
@@ -120,43 +120,49 @@
 		padding-left: 0;
 	}
 
-	:global(.agree) {
-		:global(.form-check) {
+	@mixin colored-input($color) {
+		& > input {
+			&:checked {
+				background-color: $color;
+			}
+			@include bordered($color);
+		}
+	}
+
+	.agree {
+		.form-check {
 			padding-left: 0;
 			min-height: initial;
 			height: fit-content;
 			margin-right: 5px;
 		}
 
-		:global(.very) {
-			font-size: 2em;
-		}
-
-		:global(.normal) {
+		.very {
 			font-size: 1.5em;
 		}
 
-		:global(.slight) {
+		.normal {
+			font-size: 1.25em;
+		}
+
+		.slight {
 			font-size: 1em;
 		}
 
-		:global(.neutral) {
+		.neutral {
 			font-size: .85em;
 		}
 
-		:global(.positive > input) {
-			&:checked { background-color: var(--bs-success) };
-			@include bordered(var(--bs-success));
+		.positive {
+			@include colored-input(--bs-success);
 		}
 
-		:global(.neutral > input) {
-			&:checked { background-color: var(--bs-secondary) };
-			@include bordered(var(--bs-secondary));
+		.neutral {
+			@include colored-input(--bs-secondary);
 		}
 
-		:global(.negative > input) {
-			&:checked { background-color: var(--bs-danger) };
-			@include bordered(var(--bs-danger));
+		.negative {
+			@include colored-input(--bs-danger);
 		}
 	}
 </style>
