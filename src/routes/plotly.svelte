@@ -1,55 +1,41 @@
 <script lang="ts">
-	import Plotly, { plotlyDark, plotlyWhite } from '$lib/Plotly.svelte';
-	import { range } from 'it-range';
+	import Plotly from '$lib/Plotly.svelte';
 	import type { Data, Layout } from 'plotly.js';
 
-	function makeData(shape: 'linear' | 'spline' | 'hv' | 'vh' | 'hvh' | 'vhv'): Data {
+	import { traits, traitArray, Trait } from './quiz/spirit/data';
+
+	const invisibleData: Data = {
+		type: 'scatterpolar',
+		theta: traitArray.map(x => x[1]).concat(traitArray.map(x => x[2])),
+		r: new Array(traitArray.length * 2),
+	};
+
+	function makeData(extroverted: number, thoughtful: number, artful: number): Data {
 		return {
-			x: [...range(0, 101, 5)],
-			y: [2, 2, 2, 2, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10],
-			mode: 'lines+markers',
-			name: `linear (${shape})`,
-			line: { shape },
-			type: 'scatter'
+			type: 'scatterpolar',
+			fill: 'toself',
+			theta: [traits.get(Trait.Extroverted)[extroverted >= 0 ? 0 : 1], traits.get(Trait.Thoughtful)[thoughtful >= 0 ? 0 : 1], traits.get(Trait.Artful)[artful >= 0 ? 0 : 1], traits.get(Trait.Extroverted)[extroverted >= 0 ? 0 : 1]],
+			r: [Math.abs(extroverted), Math.abs(thoughtful), Math.abs(artful), Math.abs(extroverted)],
 		};
 	}
 
-	const data: Data[] = [
-		makeData('linear'),
-		makeData('spline'),
-		makeData('hv'),
-		makeData('vh'),
-		makeData('hvh'),
-		makeData('vhv'),
+	let a = 3, b = 7, c = 5;
+
+	let data: Data[];
+	$: data = [
+		invisibleData,
+		makeData(a, b, c),
 	];
 
 	const layout: Partial<Layout> = {
-		legend: {
-			y: 0.5,
-			font: { size: 16 },
-		},
-		title: {
-			yref: 'paper',
-		},
 		height: 500,
-		xaxis: {
-			autotick: false,
-			ticks: 'outside',
-			tick0: 0,
-			dtick: 5,
-			title: 'Percentuale (100 * punti ottenuti / punti massimi)',
-			range: [0, 104],
-		},
-		yaxis: {
-			autotick: false,
-			ticks: 'outside',
-			tick0: 0,
-			dtick: 1,
-			title: 'Voto (decimi)',
-			range: [0, 10.5],
-		}
+		showlegend: false,
 	};
 </script>
+
+<input type='range' min={-10} max={10} bind:value={a} />
+<input type='range' min={-10} max={10} bind:value={b} />
+<input type='range' min={-10} max={10} bind:value={c} />
 
 <Plotly data={data} {layout} />
 

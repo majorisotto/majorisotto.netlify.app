@@ -1,14 +1,10 @@
 <script lang='ts'>
 	import { page } from '$app/stores';
 	import Highlight from '$lib/Highlight.svelte';
-	import { jsonToYaml } from '$lib/utils';
+	import { objectToYaml, errorTitle } from '$lib/utils';
 </script>
 
-{#if $page.status == 404}
-	<h1>Pagina non trovata!</h1>
-{:else}
-	<h1>Errore (<code>{$page.status}</code>)</h1>
-{/if}
+<h1>{@html errorTitle($page.status)}</h1>
 
 <p>
 	Ulteriori informazioni:
@@ -16,5 +12,5 @@
 
 <Highlight
 	lang='yaml'
-	code={jsonToYaml(JSON.stringify($page.error, null, 2))}
+	code={objectToYaml($page.error)}
 />

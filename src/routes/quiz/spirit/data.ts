@@ -1,41 +1,158 @@
-import { range } from 'it-range';
+import { type Question, agree } from "../questions";
 
-export type Style = 'plain' | 'scale' | 'stars' | 'agree';
+export enum Trait {
+	Extroverted,
+	Thoughtful,
+	Artful,
+}
 
-export interface Answer { id: string, name: string };
-export interface Question { id: string; name: string, answers: Answer[]; style: Style; };
-
-const q = (id: string) => (name: string, style: Style = 'plain') => (...answers: Answer[]) => ({ name, id, answers, style } as Question);
-const ans = (id: string) => (name: string) => ({ name, id } as Answer);
-const scale = (id: string) => (name: string, style: Style = 'scale') => (lower: number, higher: number, by = 1) => q(id)(name, style)(...[...range(lower, higher + by, by)].map(n => ans(n.toString())(n.toString())));
-const stars = (id: string) => (name: string, style: Style = 'stars') => (amt: number) => q(id)(name, style)(...[...range(amt)].map(i => i + 1).map(i => ans(i.toString())(i.toString())));
-
-const agreeNames = new Map<number, string>([
-	[-3, 'Forte disaccordo'],
-	[-2, 'Disaccordo'],
-	[-1, 'Leggero disaccordo'],
-	[0, 'Indifferente'],
-	[1, 'Leggero consenso'],
-	[2, 'Consenso'],
-	[3, 'Forte consenso'],
-]);
-
-const agree = (id: string) => (name: string, style: Style = 'agree') => q(id)(name, style)(...[...range(-3, 4)].map(i => ans(i.toString())(agreeNames.get(i))));
-
-const questions: Question[] = [
-	q('q1')('Question 1')(ans('a1')('Answer 1'), ans('a2')('Answer 2'), ans('a3')('Answer 3')),
-	q('kai')('kai')(ans('kai1')('χ1'), ans('kai2')('χ2'), ans('kai3')('χ3'), ans('kai4')('χ4')),
-	scale('scale')('Scale Question')(1, 5, 0.5),
-	stars('stars')('Rating')(5),
-	agree('agree')("I'm sociable"),
+export const traitArray: [Trait, string, string][] = [
+	[Trait.Extroverted, 'Estroverso', 'Introverso'],
+	[Trait.Thoughtful, 'Riflessivo', 'Impulsivo'],
+	[Trait.Artful, 'Artistico', 'Logico'],
 ];
+export const traits: Map<Trait, [string, string]> = new Map(traitArray.map(([trait, yes, no]) => [trait, [yes, no]]));
+
+const questions: Question[] = ([
+	['extroverted', 'Sono una persona estroversa', Trait.Extroverted, false],
+	['impulsive', 'Sono una persona impulsiva', Trait.Thoughtful, true],
+	['artful', 'Sono una persona artistica', Trait.Artful, false],
+] as [string, string, Trait, boolean][]).map(([id, name, trait, flip]) => agree(`${id}$${trait}$${flip}`)(name));
 
 export default questions;
 
-export const names = questions.map(_ => _.id);
-
-export const profiles = {
-	balanced: {
-		
-	}
+export enum Affinity {
+	Close = 1,
+	Neutral = 0,
+	Far = -1,
 };
+
+export interface Profile {
+	name: string;
+	description: string;
+	image?: string;
+}
+
+export const profiles: Map<[Affinity, Affinity, Affinity], Profile> = new Map([
+	[[Affinity.Close, Affinity.Close, Affinity.Close], {
+		name: 'ERA',
+		description: 'Estroverso, Riflessivo e Artistico',
+	}],
+	[[Affinity.Close, Affinity.Close, Affinity.Neutral], {
+		name: 'ER',
+		description: 'Estroverso e Riflessivo',
+	}],
+	[[Affinity.Close, Affinity.Close, Affinity.Far], {
+		name: 'ERL',
+		description: 'Estroverso, Logico e Artistico',
+	}],
+	[[Affinity.Close, Affinity.Neutral, Affinity.Close], {
+		name: 'EA',
+		description: 'Estroverso e Artistico',
+	}],
+	[[Affinity.Close, Affinity.Neutral, Affinity.Neutral], {
+		name: 'E',
+		description: 'Estroverso'
+	}],
+	[[Affinity.Close, Affinity.Neutral, Affinity.Far], {
+		name: 'EL',
+		description: 'Estroverso e Logico',
+	}],
+	[[Affinity.Close, Affinity.Far, Affinity.Close], {
+		name: 'EIA',
+		description: 'Estroverso, Impulsivo e Artistico',
+	}],
+	[[Affinity.Close, Affinity.Far, Affinity.Neutral], {
+		name: 'EI',
+		description: 'Estroverso e Impulsivo',
+	}],
+	[[Affinity.Close, Affinity.Far, Affinity.Far], {
+		name: 'EIL',
+		description: 'Estroverso, Impulsivo e Logico',
+	}],
+	[[Affinity.Neutral, Affinity.Close, Affinity.Close], {
+		name: 'RA',
+		description: 'Riflessivo e Artistico',
+	}],
+	[[Affinity.Neutral, Affinity.Close, Affinity.Neutral], {
+		name: 'R',
+		description: 'Riflessivo',
+	}],
+	[[Affinity.Neutral, Affinity.Close, Affinity.Far], {
+		name: 'RL',
+		description: 'Riflessivo e Logico',
+	}],
+	[[Affinity.Neutral, Affinity.Neutral, Affinity.Close], {
+		name: 'A',
+		description: 'Artistico',
+	}],
+	[[Affinity.Neutral, Affinity.Neutral, Affinity.Neutral], {
+		name: 'Risotto al Parmigiano',
+		image: 'https://www.romagnaatavola.it/wp-content/uploads/romagnaatavola.it/2020/12/Risotto-al-parmigiano.jpg',
+		description: `Il risotto al parmigiano è semplice, piace a tutti, non si sbilancia, non rischia molto, un po' come te.`,
+	}],
+	[[Affinity.Neutral, Affinity.Neutral, Affinity.Far], {
+		name: 'L',
+		description: 'Logico',
+	}],
+	[[Affinity.Neutral, Affinity.Far, Affinity.Close], {
+		name: 'IA',
+		description: 'Impulsivo e Artistico',
+	}],
+	[[Affinity.Neutral, Affinity.Far, Affinity.Neutral], {
+		name: 'I',
+		description: 'Impulsivo',
+	}],
+	[[Affinity.Neutral, Affinity.Far, Affinity.Far], {
+		name: 'IL',
+		description: 'Impulsivo e Logico',
+	}],
+	[[Affinity.Far, Affinity.Close, Affinity.Close], {
+		name: 'iRA',
+		description: 'Introverso, Riflessivo e Artistico',
+	}],
+	[[Affinity.Far, Affinity.Close, Affinity.Neutral], {
+		name: 'iR',
+		description: 'Introverso e Riflessivo',
+	}],
+	[[Affinity.Far, Affinity.Close, Affinity.Far], {
+		name: 'iRL',
+		description: 'Introverso, Logico e Artistico',
+	}],
+	[[Affinity.Far, Affinity.Neutral, Affinity.Close], {
+		name: 'iA',
+		description: 'Introverso e Artistico',
+	}],
+	[[Affinity.Far, Affinity.Neutral, Affinity.Neutral], {
+		name: 'i',
+		description: 'Introverso'
+	}],
+	[[Affinity.Far, Affinity.Neutral, Affinity.Far], {
+		name: 'iL',
+		description: 'Introverso e Logico',
+	}],
+	[[Affinity.Far, Affinity.Far, Affinity.Close], {
+		name: 'iIA',
+		description: 'Introverso, Impulsivo e Artistico',
+	}],
+	[[Affinity.Far, Affinity.Far, Affinity.Neutral], {
+		name: 'iI',
+		description: 'Introverso e Impulsivo',
+	}],
+	[[Affinity.Far, Affinity.Far, Affinity.Far], {
+		name: 'iIL',
+		description: 'Introverso, Impulsivo e Logico',
+	}],
+]);
+
+export function profile(extroverted: number, thoughtful: number, artful: number): Profile {
+	const THRESHOLD = 2;
+
+	function affinity(a: number) {
+		if (a > THRESHOLD) return Affinity.Close;
+		if (a < -THRESHOLD) return Affinity.Far;
+		return Affinity.Neutral;
+	}
+
+	return [...profiles.entries()].find(([[E, T, A]]) => E === affinity(extroverted) && T === affinity(thoughtful) && A === affinity(artful))[1];
+}

@@ -1,6 +1,6 @@
 <script lang='ts'>
 	import { ButtonGroup, Input, Label } from 'sveltestrap';
-	import type { Answer, Style } from './data';
+	import type { Answer, Style } from './questions';
 
 	export let id: string;
 	export let label: string;
@@ -38,10 +38,13 @@
 	}
 </script>
 
-<span class='agree'><span class='form-check neutral slight normal very positive negative'><input /></span></span>
+{#if false}
+	<!-- Stuff needed to confirm style existence -->
+	<span class='agree'><span class='form-check neutral slight normal very positive negative'><input /></span></span>
+{/if}
 
+<Label for={id}><h5>{label}</h5></Label>
 {#if style === 'scale'}
-	<Label for={id}>{label}</Label>
 	<br />
 	<ButtonGroup>
 		{#each answers as answer}
@@ -50,7 +53,6 @@
 		{/each}
 	</ButtonGroup>
 {:else if style === 'stars'}
-	<Label for={id}>{label}</Label>
 	<br />
 	<div class='d-inline-flex flex-row-reverse rating'>
 		{#each answers.slice().reverse() as answer}
@@ -59,17 +61,26 @@
 		{/each}
 	</div>
 {:else if style === 'agree'}
-	<Label for={id}>{label}</Label>
 	<br />
 	<div class='d-inline-flex align-items-center agree'>
+		<h6 class='text-success m-2'>Approvo</h6>
 		{#each answers as answer}
-			<Input name={id} type='radio' value={answer.id} title={answer.name} bind:group={value} class={'d-inline-block ' + classFor(answer.id)} />
+			<div class:form-check={true} class={classFor(answer.id)}>
+				<input
+					name={id}
+					type='radio'
+					value={answer.id}
+					title={answer.name}
+					bind:group={value}
+					class:form-check-input={true}
+				/>
+			</div>
 			<!-- <input class='btn-check' name={id} type='radio' value={answer.id} bind:group={value} autocomplete='off' id={id + '$' + answer.id} />
 			<label class={'btn btn-outline-primary ' + strengthName(strength(answer.id))} for={id + '$' + answer.id} title={answer.name}>&bull;</label> -->
 		{/each}
+		<h6 class='text-danger m-2'>Dispprovo</h6>
 	</div>
 {:else if style === 'plain'}
-	<Label for={id}>{label}</Label>
 	{#each answers as answer}
 		<Input name={id} type='radio' value={answer.id} label={answer.name} bind:group={value} />
 	{/each}
@@ -106,11 +117,6 @@
 		}
 	}
 
-	@mixin transform-box($size) {
-		transform: scale($size);
-		margin: 0 auto calc(0);
-	}
-
 	@mixin bordered($color) {
 		border-color: $color;
 		border-width: 1px;
@@ -127,6 +133,7 @@
 			}
 			@include bordered($color);
 		}
+		color: $color;
 	}
 
 	.agree {
@@ -134,7 +141,19 @@
 			padding-left: 0;
 			min-height: initial;
 			height: fit-content;
-			margin-right: 5px;
+			margin-bottom: 0;
+
+			&:last-of-type {
+				margin-right: 0;
+			}
+
+			&:not(:last-of-type) {
+				margin-right: 5px;
+			}
+
+			input {
+				margin-top: 0;
+			}
 		}
 
 		.very {
@@ -154,15 +173,15 @@
 		}
 
 		.positive {
-			@include colored-input(--bs-success);
+			@include colored-input(var(--bs-success));
 		}
 
 		.neutral {
-			@include colored-input(--bs-secondary);
+			@include colored-input(var(--bs-secondary));
 		}
 
 		.negative {
-			@include colored-input(--bs-danger);
+			@include colored-input(var(--bs-danger));
 		}
 	}
 </style>
