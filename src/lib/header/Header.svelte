@@ -37,6 +37,10 @@
 				<Icon name='send' />
 				Scrivici!
 			</MaybeNavLink>
+			<MaybeNavLink href='/blog' root='/blog'>
+				<Icon name='body-text' />
+				Blog
+			</MaybeNavLink>
 			<MaybeNavLink href='/mantecalista'>
 				<Icon name='mic' />
 				La Mantecalista
@@ -47,7 +51,3 @@
 		</Nav>
 	</Collapse>
 </Navbar>
-
-<style lang='scss'>
-
-</style>
