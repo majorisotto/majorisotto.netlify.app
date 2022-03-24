@@ -81,14 +81,14 @@
 		fattore di qualità della vita della scuola."
 	</p>
 	<p>
-		Per concludere, un po' di dati. Abbiamo ricevuto 89 risposte. Di queste, 67 persone non si
-		definiscono cis. 39 si definiscono uomini, 47 donne, 2 non binari, una persona preferisce non
-		rispondere. 30 persone si definiscono non etero. 75 persone dichiarano di aver subito episodi di
+		Per concludere, un po' di dati. Abbiamo ricevuto 90 risposte. Di queste, 68 persone non si
+		definiscono cis. 39 si definiscono uomini, 47 donne, 2 persone non binarie, 2 preferiscono non
+		rispondere. 30 persone si definiscono non etero. 76 persone dichiarano di aver subito episodi di
 		bullismo, violenza o molestie, collegate alla propria identità. 11 persone dicono di essersi
-		trovate bene nella propria classe. 26 dicono che almeno uno studente nella propria classe li ha
-		sostenuti nella loro ricerca di un'identità. In 21 non hanno mai detto alla propria classe di
-		non essere cishet, in 47 non hanno detto di non essere cis ai professori. 87 persone chiedono
-		che la scuola faccia qualcosa per ridurre gli episodi di rifiuto di chi è diverso. Le altre 2
+		trovate bene nella propria classe. 27 dicono che almeno uno studente nella propria classe li ha
+		sostenuti nella loro ricerca di un'identità. In 22 non hanno mai detto alla propria classe di
+		non essere cishet, in 48 non hanno detto di non essere cis ai professori. 87 persone chiedono
+		che la scuola faccia qualcosa per ridurre gli episodi di rifiuto di chi è diverso. Le altre 3
 		preferiscono non rispondere.
 	</p>
 </Article>
